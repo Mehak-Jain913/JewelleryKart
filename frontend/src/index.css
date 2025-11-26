@@ -1,0 +1,193 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #D4AF37; /* Gold */
+  --color-secondary: #000000; /* Jet Black */
+  --color-accent: #F5F5F5; /* Soft White */
+  --color-highlight: #B08B3A; /* Rich Metallic */
+  --color-text: #1C1C1C; /* Deep Charcoal */
+}
+
+/* Global typography */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--color-text);
+  background: var(--color-accent);
+}
+
+h1, h2, h3, .font-display {
+  font-family: "Playfair Display", Georgia, "Times New Roman", Times, serif;
+}
+
+/* Component utilities */
+@layer components {
+  .btn-gold {
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-md font-semibold transition-colors;
+    background: #D4AF37;
+    color: #000000;
+  }
+  .btn-gold:hover {
+    background: #B08B3A;
+    color: #000000;
+  }
+  .btn-black {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-semibold transition-colors;
+    background: #000000;
+    color: #D4AF37;
+  }
+  .btn-black:hover {
+    background: #D4AF37;
+    color: #000000;
+  }
+  .card-lux {
+    @apply rounded-2xl bg-white border transition-all duration-300;
+    border-color: #E8D8A6; /* subtle gold-tinted border */
+  }
+  .card-lux:hover {
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    transform: translateY(-4px);
+  }
+}
+
+@layer base {
+  :root {
+    --gold: #D4AF37;
+    --jet: #000000;
+    --soft: #F5F5F5;
+    --metallic: #B08B3A;
+    --charcoal: #1C1C1C;
+  }
+  html {
+    color: var(--charcoal);
+    background-color: #ffffff;
+    font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Playfair Display", Georgia, "Times New Roman", Times, serif;
+  }
+}
+
+@layer components {
+  .btn-gold {
+    @apply px-6 py-3 rounded-md font-semibold text-black transition-all duration-300;
+    background: linear-gradient(135deg, var(--gold), var(--metallic));
+  }
+  .btn-gold:hover {
+    background: linear-gradient(135deg, var(--metallic), var(--gold));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(212, 175, 55, 0.3);
+  }
+  .btn-gold:active {
+    transform: translateY(0);
+  }
+  .btn-black-gold {
+    @apply px-4 py-2 rounded-md font-semibold text-[var(--gold)] bg-black transition-all duration-300;
+  }
+  .btn-black-gold:hover {
+    color: #000;
+    background: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(212, 175, 55, 0.3);
+  }
+  .card {
+    @apply bg-white rounded-2xl border shadow-sm transition-all duration-300;
+    border-color: color-mix(in oklab, var(--gold) 35%, #e5e7eb);
+  }
+  .card-hover:hover {
+    @apply shadow-md;
+    transform: translateY(-4px);
+  }
+  .input-gold {
+    @apply w-full rounded-md px-3 py-2 border focus:outline-none transition-all duration-300;
+    border-color: color-mix(in oklab, var(--gold) 35%, #d1d5db);
+  }
+  .input-gold:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+  }
+  .table-head {
+    @apply text-sm;
+    color: color-mix(in oklab, var(--charcoal) 80%, #6b7280);
+  }
+}
+
+/* Premium animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.5s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Premium hover effects */
+button, a {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover, a:hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Image zoom effect */
+img {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card luxury effects */
+.card-lux {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-lux:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
