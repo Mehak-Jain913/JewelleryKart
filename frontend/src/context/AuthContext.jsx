@@ -3,19 +3,26 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 const AuthContext = createContext(null)
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [token, setToken] = useState(null)
-
-  useEffect(() => {
+  const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('auth')
     if (saved) {
       try {
         const parsed = JSON.parse(saved)
-        setUser(parsed.user)
-        setToken(parsed.token)
+        return parsed.user
       } catch {}
     }
-  }, [])
+    return null
+  })
+  const [token, setToken] = useState(() => {
+    const saved = localStorage.getItem('auth')
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved)
+        return parsed.token
+      } catch {}
+    }
+    return null
+  })
 
   const login = (nextUser, nextToken) => {
     setUser(nextUser)

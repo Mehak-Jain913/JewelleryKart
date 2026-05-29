@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useNavigate, Link } from 'react-router-dom'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { Users, ShoppingBag, Box, DollarSign, LogOut, LayoutDashboard } from 'lucide-react'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -124,381 +125,308 @@ const AdminDashboard = () => {
 
   return (
     <div 
-      className="min-h-screen flex"
+      className="min-h-screen flex text-white font-sans"
       style={{
-        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)'
+        background: 'radial-gradient(circle at 50% 50%, #121212 0%, #080808 100%)'
       }}
     >
       {/* Sidebar */}
       <div 
-        className="w-64 min-h-screen p-6"
+        className="w-64 min-h-screen p-6 flex flex-col justify-between backdrop-blur-md"
         style={{
-          background: 'linear-gradient(180deg, #1a1a1a 0%, #000000 100%)',
-          borderRight: '2px solid rgba(212, 175, 55, 0.3)',
-          boxShadow: '4px 0 20px rgba(0, 0, 0, 0.5)'
+          background: 'rgba(10, 10, 10, 0.95)',
+          borderRight: '1px solid rgba(212, 175, 55, 0.15)',
+          boxShadow: '10px 0 30px rgba(0, 0, 0, 0.8)'
         }}
       >
-        <div className="mb-8">
-          <h1 
-            className="text-2xl font-bold mb-2"
-            style={{ color: '#D4AF37' }}
-          >
-            JewelleryKart
-          </h1>
-          <p 
-            className="text-sm"
-            style={{ color: '#F5F5F5' }}
-          >
-            Admin Dashboard
-          </p>
+        <div>
+          <div className="mb-10 text-center border-b border-[#D4AF37]/20 pb-6">
+            <Link to="/" className="text-3xl font-black font-display tracking-widest text-[#D4AF37] block hover:opacity-80 transition-opacity">
+              JEWELUXE
+            </Link>
+            <p className="text-xs uppercase tracking-widest text-gray-500 mt-2 font-semibold">
+              Management Portal
+            </p>
+          </div>
+
+          <nav className="space-y-3">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className="w-full px-4 py-3.5 rounded-xl transition-all duration-300 flex items-center gap-4 text-sm font-semibold tracking-wide cursor-pointer"
+              style={{
+                background: activeTab === 'dashboard' ? 'linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%)' : 'transparent',
+                color: activeTab === 'dashboard' ? '#D4AF37' : '#A0A0A0',
+                border: activeTab === 'dashboard' ? '1px solid rgba(212, 175, 55, 0.3)' : '1px solid transparent',
+                boxShadow: activeTab === 'dashboard' ? '0 4px 15px rgba(212, 175, 55, 0.1)' : 'none'
+              }}
+            >
+              <LayoutDashboard className="w-5 h-5" />
+              Dashboard
+            </button>
+
+            <Link
+              to="/admin"
+              className="w-full px-4 py-3.5 rounded-xl transition-all duration-300 flex items-center gap-4 text-sm font-semibold tracking-wide text-[#A0A0A0] hover:text-[#D4AF37] border border-transparent hover:border-[#D4AF37]/20 hover:bg-[#D4AF37]/5"
+            >
+              <Box className="w-5 h-5" />
+              Products List
+            </Link>
+
+            <button
+              onClick={() => setActiveTab('orders')}
+              className="w-full px-4 py-3.5 rounded-xl transition-all duration-300 flex items-center gap-4 text-sm font-semibold tracking-wide cursor-pointer"
+              style={{
+                background: activeTab === 'orders' ? 'linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%)' : 'transparent',
+                color: activeTab === 'orders' ? '#D4AF37' : '#A0A0A0',
+                border: activeTab === 'orders' ? '1px solid rgba(212, 175, 55, 0.3)' : '1px solid transparent',
+                boxShadow: activeTab === 'orders' ? '0 4px 15px rgba(212, 175, 55, 0.1)' : 'none'
+              }}
+            >
+              <ShoppingBag className="w-5 h-5" />
+              Orders
+            </button>
+
+            <button
+              onClick={() => setActiveTab('users')}
+              className="w-full px-4 py-3.5 rounded-xl transition-all duration-300 flex items-center gap-4 text-sm font-semibold tracking-wide cursor-pointer"
+              style={{
+                background: activeTab === 'users' ? 'linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%)' : 'transparent',
+                color: activeTab === 'users' ? '#D4AF37' : '#A0A0A0',
+                border: activeTab === 'users' ? '1px solid rgba(212, 175, 55, 0.3)' : '1px solid transparent',
+                boxShadow: activeTab === 'users' ? '0 4px 15px rgba(212, 175, 55, 0.1)' : 'none'
+              }}
+            >
+              <Users className="w-5 h-5" />
+              Users
+            </button>
+          </nav>
         </div>
 
-        <nav className="space-y-2 mb-8">
-          <button
-            onClick={() => setActiveTab('dashboard')}
-            className="w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center gap-3"
-            style={{
-              background: activeTab === 'dashboard' ? 'rgba(212, 175, 55, 0.2)' : 'transparent',
-              color: activeTab === 'dashboard' ? '#D4AF37' : '#F5F5F5',
-              border: activeTab === 'dashboard' ? '1px solid rgba(212, 175, 55, 0.5)' : '1px solid transparent'
-            }}
-            onMouseEnter={(e) => {
-              if (activeTab !== 'dashboard') {
-                e.target.style.background = 'rgba(212, 175, 55, 0.1)'
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (activeTab !== 'dashboard') {
-                e.target.style.background = 'transparent'
-              }
-            }}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            Dashboard
-          </button>
-
-          <Link
-            to="/admin"
-            className="w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center gap-3 block"
-            style={{
-              color: '#F5F5F5',
-              border: '1px solid transparent'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(212, 175, 55, 0.1)'
-              e.target.style.borderColor = 'rgba(212, 175, 55, 0.3)'
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'transparent'
-              e.target.style.borderColor = 'transparent'
-            }}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-            Products
-          </Link>
-
-          <button
-            onClick={() => setActiveTab('orders')}
-            className="w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center gap-3"
-            style={{
-              background: activeTab === 'orders' ? 'rgba(212, 175, 55, 0.2)' : 'transparent',
-              color: activeTab === 'orders' ? '#D4AF37' : '#F5F5F5',
-              border: activeTab === 'orders' ? '1px solid rgba(212, 175, 55, 0.5)' : '1px solid transparent'
-            }}
-            onMouseEnter={(e) => {
-              if (activeTab !== 'orders') {
-                e.target.style.background = 'rgba(212, 175, 55, 0.1)'
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (activeTab !== 'orders') {
-                e.target.style.background = 'transparent'
-              }
-            }}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
-            Orders
-          </button>
-
-          <button
-            onClick={() => setActiveTab('users')}
-            className="w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center gap-3"
-            style={{
-              background: activeTab === 'users' ? 'rgba(212, 175, 55, 0.2)' : 'transparent',
-              color: activeTab === 'users' ? '#D4AF37' : '#F5F5F5',
-              border: activeTab === 'users' ? '1px solid rgba(212, 175, 55, 0.5)' : '1px solid transparent'
-            }}
-            onMouseEnter={(e) => {
-              if (activeTab !== 'users') {
-                e.target.style.background = 'rgba(212, 175, 55, 0.1)'
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (activeTab !== 'users') {
-                e.target.style.background = 'transparent'
-              }
-            }}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-            Users
-          </button>
-        </nav>
-
-        <div className="mt-auto pt-8 border-t" style={{ borderColor: 'rgba(212, 175, 55, 0.3)' }}>
-          <div className="mb-4 px-4">
-            <p 
-              className="text-sm font-semibold"
-              style={{ color: '#D4AF37' }}
-            >
-              {user?.name || 'Admin'}
-            </p>
-            <p 
-              className="text-xs"
-              style={{ color: '#F5F5F5' }}
-            >
-              {user?.email}
-            </p>
+        <div className="pt-6 border-t border-[#D4AF37]/15">
+          <div className="mb-5 px-3">
+            <p className="text-sm font-bold text-[#D4AF37] truncate">{user?.name || 'Administrator'}</p>
+            <p className="text-xs text-gray-500 truncate mt-0.5">{user?.email}</p>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full px-4 py-3 rounded-lg transition-all duration-300 flex items-center gap-3"
-            style={{
-              background: 'rgba(220, 38, 38, 0.2)',
-              color: '#FCA5A5',
-              border: '1px solid rgba(220, 38, 38, 0.5)'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(220, 38, 38, 0.3)'
-              e.target.style.transform = 'scale(1.02)'
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(220, 38, 38, 0.2)'
-              e.target.style.transform = 'scale(1)'
-            }}
+            className="w-full px-4 py-3 rounded-xl transition-all duration-300 flex items-center gap-4 text-sm font-semibold tracking-wide bg-red-950/20 hover:bg-red-900/30 text-red-300 border border-red-900/30 hover:border-red-500/50 hover:shadow-[0_4px_15px_rgba(239,68,68,0.1)] active:scale-[0.98] cursor-pointer"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
+            <LogOut className="w-5 h-5" />
             Logout
           </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8 overflow-auto">
+      <div className="flex-1 p-8 overflow-auto flex flex-col">
         {error && (
-          <div 
-            className="mb-6 p-4 rounded-lg"
-            style={{
-              background: 'rgba(220, 38, 38, 0.2)',
-              border: '1px solid rgba(220, 38, 38, 0.5)',
-              color: '#FCA5A5'
-            }}
-          >
+          <div className="mb-6 p-4 rounded-xl bg-red-950/30 border border-red-500/50 text-red-200 animate-scale-in text-sm flex items-center gap-3">
+            <svg className="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
             {error}
           </div>
         )}
 
         {loading ? (
-          <div className="text-center py-12" style={{ color: '#F5F5F5' }}>
-            Loading...
+          <div className="flex-1 flex flex-col items-center justify-center text-gray-400 gap-3">
+            <div className="w-12 h-12 border-4 border-[#D4AF37] border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm font-semibold tracking-widest text-[#D4AF37] uppercase">Loading Dashboard...</p>
           </div>
         ) : (
-          <>
+          <div className="animate-fade-in flex-1 flex flex-col">
             {activeTab === 'dashboard' && (
-              <div className="space-y-8">
-                <h2 
-                  className="text-4xl font-bold mb-8"
-                  style={{ color: '#D4AF37' }}
-                >
-                  Dashboard Overview
-                </h2>
+              <div className="space-y-8 flex-1 flex flex-col">
+                <div className="flex items-center justify-between border-b border-[#D4AF37]/10 pb-5">
+                  <div>
+                    <h2 className="text-4xl font-extrabold font-display tracking-tight text-white">
+                      Dashboard Overview
+                    </h2>
+                    <p className="text-gray-400 text-sm mt-1">Real-time boutique performance, statistics, and orders tracking.</p>
+                  </div>
+                  <div className="text-xs uppercase tracking-widest px-4 py-2 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/20 text-[#D4AF37] font-bold">
+                    SYSTEM LIVE
+                  </div>
+                </div>
 
                 {/* Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* Card 1 */}
                   <div 
-                    className="p-6 rounded-xl transition-all duration-300 hover:scale-105"
+                    className="p-6 rounded-2xl transition-all duration-300 hover:scale-[1.03]"
                     style={{
-                      background: 'rgba(212, 175, 55, 0.1)',
-                      border: '2px solid rgba(212, 175, 55, 0.3)',
-                      boxShadow: '0 4px 15px rgba(212, 175, 55, 0.2)'
+                      background: 'rgba(255, 255, 255, 0.02)',
+                      border: '1px solid rgba(212, 175, 55, 0.15)',
+                      backdropFilter: 'blur(12px)',
+                      boxShadow: '0 4px 30px rgba(0, 0, 0, 0.4)'
                     }}
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <h3 
-                        className="text-sm font-semibold uppercase"
-                        style={{ color: '#D4AF37' }}
-                      >
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">
                         Total Users
                       </h3>
-                      <svg className="w-8 h-8" style={{ color: '#D4AF37' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                      </svg>
+                      <div className="p-3 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/20">
+                        <Users className="w-6 h-6 text-[#D4AF37]" />
+                      </div>
                     </div>
-                    <p 
-                      className="text-3xl font-bold"
-                      style={{ color: '#F5F5F5' }}
-                    >
+                    <p className="text-3xl font-extrabold text-white tracking-tight">
                       {summary?.totalUsers || 0}
                     </p>
+                    <p className="text-xs text-gray-500 mt-2">Registered client accounts</p>
                   </div>
 
+                  {/* Card 2 */}
                   <div 
-                    className="p-6 rounded-xl transition-all duration-300 hover:scale-105"
+                    className="p-6 rounded-2xl transition-all duration-300 hover:scale-[1.03]"
                     style={{
-                      background: 'rgba(212, 175, 55, 0.1)',
-                      border: '2px solid rgba(212, 175, 55, 0.3)',
-                      boxShadow: '0 4px 15px rgba(212, 175, 55, 0.2)'
+                      background: 'rgba(255, 255, 255, 0.02)',
+                      border: '1px solid rgba(212, 175, 55, 0.15)',
+                      backdropFilter: 'blur(12px)',
+                      boxShadow: '0 4px 30px rgba(0, 0, 0, 0.4)'
                     }}
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <h3 
-                        className="text-sm font-semibold uppercase"
-                        style={{ color: '#D4AF37' }}
-                      >
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">
                         Total Orders
                       </h3>
-                      <svg className="w-8 h-8" style={{ color: '#D4AF37' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                      </svg>
+                      <div className="p-3 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/20">
+                        <ShoppingBag className="w-6 h-6 text-[#D4AF37]" />
+                      </div>
                     </div>
-                    <p 
-                      className="text-3xl font-bold"
-                      style={{ color: '#F5F5F5' }}
-                    >
+                    <p className="text-3xl font-extrabold text-white tracking-tight">
                       {summary?.totalOrders || 0}
                     </p>
+                    <p className="text-xs text-gray-500 mt-2">Completed checkouts</p>
                   </div>
 
+                  {/* Card 3 */}
                   <div 
-                    className="p-6 rounded-xl transition-all duration-300 hover:scale-105"
+                    className="p-6 rounded-2xl transition-all duration-300 hover:scale-[1.03]"
                     style={{
-                      background: 'rgba(212, 175, 55, 0.1)',
-                      border: '2px solid rgba(212, 175, 55, 0.3)',
-                      boxShadow: '0 4px 15px rgba(212, 175, 55, 0.2)'
+                      background: 'rgba(255, 255, 255, 0.02)',
+                      border: '1px solid rgba(212, 175, 55, 0.15)',
+                      backdropFilter: 'blur(12px)',
+                      boxShadow: '0 4px 30px rgba(0, 0, 0, 0.4)'
                     }}
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <h3 
-                        className="text-sm font-semibold uppercase"
-                        style={{ color: '#D4AF37' }}
-                      >
-                        Total Products
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">
+                        Boutique Items
                       </h3>
-                      <svg className="w-8 h-8" style={{ color: '#D4AF37' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                      </svg>
+                      <div className="p-3 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/20">
+                        <Box className="w-6 h-6 text-[#D4AF37]" />
+                      </div>
                     </div>
-                    <p 
-                      className="text-3xl font-bold"
-                      style={{ color: '#F5F5F5' }}
-                    >
+                    <p className="text-3xl font-extrabold text-white tracking-tight">
                       {summary?.totalProducts || 0}
                     </p>
+                    <p className="text-xs text-gray-500 mt-2">Total active catalog products</p>
                   </div>
 
+                  {/* Card 4 */}
                   <div 
-                    className="p-6 rounded-xl transition-all duration-300 hover:scale-105"
+                    className="p-6 rounded-2xl transition-all duration-300 hover:scale-[1.03]"
                     style={{
-                      background: 'rgba(212, 175, 55, 0.1)',
-                      border: '2px solid rgba(212, 175, 55, 0.3)',
-                      boxShadow: '0 4px 15px rgba(212, 175, 55, 0.2)'
+                      background: 'rgba(255, 255, 255, 0.02)',
+                      border: '1px solid rgba(212, 175, 55, 0.15)',
+                      backdropFilter: 'blur(12px)',
+                      boxShadow: '0 4px 30px rgba(0, 0, 0, 0.4)'
                     }}
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <h3 
-                        className="text-sm font-semibold uppercase"
-                        style={{ color: '#D4AF37' }}
-                      >
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">
                         Total Revenue
                       </h3>
-                      <svg className="w-8 h-8" style={{ color: '#D4AF37' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                      <div className="p-3 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/20">
+                        <DollarSign className="w-6 h-6 text-[#D4AF37]" />
+                      </div>
                     </div>
-                    <p 
-                      className="text-3xl font-bold"
-                      style={{ color: '#F5F5F5' }}
-                    >
-                      ${summary?.totalRevenue?.toFixed(2) || '0.00'}
+                    <p className="text-3xl font-extrabold text-[#D4AF37] tracking-tight">
+                      ${summary?.totalRevenue?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
                     </p>
+                    <p className="text-xs text-gray-500 mt-2">Total gross revenue</p>
                   </div>
                 </div>
 
                 {/* Charts */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Sales Chart */}
                   <div 
-                    className="p-6 rounded-xl"
+                    className="p-6 rounded-2xl"
                     style={{
-                      background: 'rgba(245, 245, 245, 0.05)',
-                      border: '2px solid rgba(212, 175, 55, 0.3)',
-                      boxShadow: '0 4px 15px rgba(212, 175, 55, 0.2)'
+                      background: 'rgba(20, 20, 20, 0.4)',
+                      border: '1px solid rgba(212, 175, 55, 0.12)',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
                     }}
                   >
-                    <h3 
-                      className="text-xl font-bold mb-4"
-                      style={{ color: '#D4AF37' }}
-                    >
-                      Monthly Sales
-                    </h3>
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-lg font-bold text-white font-display tracking-wide">
+                        Sales Performance
+                      </h3>
+                      <span className="text-xs text-gray-400">Last 12 Months</span>
+                    </div>
                     {monthlySalesData.length > 0 ? (
                       <ResponsiveContainer width="100%" height={300}>
                         <BarChart data={monthlySalesData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(212, 175, 55, 0.2)" />
+                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(212, 175, 55, 0.05)" />
                           <XAxis 
                             dataKey="month" 
-                            stroke="#D4AF37"
-                            angle={-45}
-                            textAnchor="end"
-                            height={80}
+                            stroke="#8A8A8A"
+                            fontSize={11}
+                            tickLine={false}
                           />
                           <YAxis 
-                            stroke="#D4AF37"
-                            tickFormatter={(value) => `$${value.toFixed(0)}`}
+                            stroke="#8A8A8A"
+                            fontSize={11}
+                            tickLine={false}
+                            tickFormatter={(value) => `$${value}`}
                           />
                           <Tooltip 
                             contentStyle={{
-                              background: '#1a1a1a',
+                              background: 'rgba(15, 15, 15, 0.95)',
                               border: '1px solid rgba(212, 175, 55, 0.3)',
-                              color: '#F5F5F5'
+                              borderRadius: '12px',
+                              color: '#F5F5F5',
+                              boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                              fontSize: 12
                             }}
-                            formatter={(value) => `$${Number(value).toFixed(2)}`}
+                            formatter={(value) => [`$${Number(value).toFixed(2)}`, 'Sales']}
                           />
-                          <Legend />
-                          <Bar dataKey="sales" fill="#D4AF37" />
+                          <Bar dataKey="sales" fill="url(#goldGradient)" radius={[6, 6, 0, 0]}>
+                            {monthlySalesData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} />
+                            ))}
+                          </Bar>
+                          <defs>
+                            <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#F5D76E" stopOpacity={1} />
+                              <stop offset="100%" stopColor="#B08B3A" stopOpacity={0.8} />
+                            </linearGradient>
+                          </defs>
                         </BarChart>
                       </ResponsiveContainer>
                     ) : (
-                      <div className="text-center py-12" style={{ color: '#F5F5F5' }}>
-                        No sales data available
+                      <div className="text-center py-20 text-gray-500 text-sm">
+                        No sales data available currently.
                       </div>
                     )}
                   </div>
 
                   {/* Orders Distribution Pie Chart */}
                   <div 
-                    className="p-6 rounded-xl"
+                    className="p-6 rounded-2xl"
                     style={{
-                      background: 'rgba(245, 245, 245, 0.05)',
-                      border: '2px solid rgba(212, 175, 55, 0.3)',
-                      boxShadow: '0 4px 15px rgba(212, 175, 55, 0.2)'
+                      background: 'rgba(20, 20, 20, 0.4)',
+                      border: '1px solid rgba(212, 175, 55, 0.12)',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
                     }}
                   >
-                    <h3 
-                      className="text-xl font-bold mb-4"
-                      style={{ color: '#D4AF37' }}
-                    >
-                      Orders Distribution
-                    </h3>
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-lg font-bold text-white font-display tracking-wide">
+                        Top Customers Share
+                      </h3>
+                      <span className="text-xs text-gray-400">Order Share %</span>
+                    </div>
                     {orderDistributionData.length > 0 ? (
                       <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
@@ -508,26 +436,29 @@ const AdminDashboard = () => {
                             cy="50%"
                             labelLine={false}
                             label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                            outerRadius={80}
-                            fill="#8884d8"
+                            outerRadius={85}
                             dataKey="value"
+                            fontSize={11}
                           >
                             {orderDistributionData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="rgba(0,0,0,0.4)" strokeWidth={2} />
                             ))}
                           </Pie>
                           <Tooltip 
                             contentStyle={{
-                              background: '#1a1a1a',
+                              background: 'rgba(15, 15, 15, 0.95)',
                               border: '1px solid rgba(212, 175, 55, 0.3)',
-                              color: '#F5F5F5'
+                              borderRadius: '12px',
+                              color: '#F5F5F5',
+                              boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                              fontSize: 12
                             }}
                           />
                         </PieChart>
                       </ResponsiveContainer>
                     ) : (
-                      <div className="text-center py-12" style={{ color: '#F5F5F5' }}>
-                        No orders data available
+                      <div className="text-center py-20 text-gray-500 text-sm">
+                        No orders data available currently.
                       </div>
                     )}
                   </div>
@@ -536,34 +467,35 @@ const AdminDashboard = () => {
             )}
 
             {activeTab === 'orders' && (
-              <div className="space-y-6">
-                <h2 
-                  className="text-4xl font-bold mb-8"
-                  style={{ color: '#D4AF37' }}
-                >
-                  Recent Orders
-                </h2>
+              <div className="space-y-6 flex-1 flex flex-col">
+                <div className="border-b border-[#D4AF37]/10 pb-5">
+                  <h2 className="text-4xl font-extrabold font-display tracking-tight text-white">
+                    Order Registers
+                  </h2>
+                  <p className="text-gray-400 text-sm mt-1">Review and manage recent boutique customer transactions.</p>
+                </div>
+                
                 <div 
-                  className="rounded-xl overflow-hidden"
+                  className="rounded-2xl border overflow-hidden flex-1"
                   style={{
-                    background: 'rgba(245, 245, 245, 0.05)',
-                    border: '2px solid rgba(212, 175, 55, 0.3)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.2)'
+                    background: 'rgba(20, 20, 20, 0.4)',
+                    borderColor: 'rgba(212, 175, 55, 0.15)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
                   }}
                 >
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
+                  <div className="overflow-x-auto h-full">
+                    <table className="w-full text-left text-sm text-gray-300">
                       <thead>
-                        <tr style={{ borderBottom: '2px solid rgba(212, 175, 55, 0.3)' }}>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>Order ID</th>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>User</th>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>Product</th>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>Quantity</th>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>Total</th>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>Date</th>
+                        <tr className="bg-black/60 border-b border-[#D4AF37]/20">
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37]">Order ID</th>
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37]">Customer</th>
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37]">Items Purchased</th>
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37] text-center">Items Qty</th>
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37] text-right">Total amount</th>
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37]">Purchase Date</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="divide-y divide-[#D4AF37]/10">
                         {orders.length > 0 ? (
                           orders.map((order) => {
                             const totalQuantity = order.items?.reduce((sum, item) => sum + item.quantity, 0) || 0
@@ -571,36 +503,35 @@ const AdminDashboard = () => {
                             return (
                               <tr 
                                 key={order.id}
-                                style={{ borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}
-                                className="hover:bg-opacity-10"
-                                onMouseEnter={(e) => {
-                                  e.currentTarget.style.background = 'rgba(212, 175, 55, 0.1)'
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.background = 'transparent'
-                                }}
+                                className="hover:bg-[#D4AF37]/5 transition-colors duration-200"
                               >
-                                <td className="px-6 py-4" style={{ color: '#F5F5F5' }}>{order.id}</td>
-                                <td className="px-6 py-4" style={{ color: '#F5F5F5' }}>{order.user_name}</td>
-                                <td className="px-6 py-4" style={{ color: '#F5F5F5' }}>
-                                  <div className="max-w-xs truncate" title={productsList}>
+                                <td className="px-6 py-4 font-mono font-medium text-[#D4AF37]">#{order.id}</td>
+                                <td className="px-6 py-4">
+                                  <div className="font-semibold text-white">{order.user_name}</div>
+                                  <div className="text-xs text-gray-500">{order.user_email}</div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="max-w-xs truncate text-white" title={productsList}>
                                     {productsList}
                                   </div>
                                 </td>
-                                <td className="px-6 py-4" style={{ color: '#F5F5F5' }}>{totalQuantity}</td>
-                                <td className="px-6 py-4" style={{ color: '#D4AF37', fontWeight: 'bold' }}>
+                                <td className="px-6 py-4 text-center font-semibold text-white">{totalQuantity}</td>
+                                <td className="px-6 py-4 text-right font-extrabold text-[#D4AF37]">
                                   ${Number(order.total).toFixed(2)}
                                 </td>
-                                <td className="px-6 py-4" style={{ color: '#F5F5F5' }}>
-                                  {new Date(order.order_date).toLocaleDateString()}
+                                <td className="px-6 py-4 text-gray-400">
+                                  {new Date(order.order_date).toLocaleDateString('en-US', {
+                                    year: 'numeric', month: 'short', day: 'numeric',
+                                    hour: '2-digit', minute: '2-digit'
+                                  })}
                                 </td>
                               </tr>
                             )
                           })
                         ) : (
                           <tr>
-                            <td colSpan={6} className="px-6 py-8 text-center" style={{ color: '#F5F5F5' }}>
-                              No orders found
+                            <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                              No customer orders recorded yet.
                             </td>
                           </tr>
                         )}
@@ -612,66 +543,60 @@ const AdminDashboard = () => {
             )}
 
             {activeTab === 'users' && (
-              <div className="space-y-6">
-                <h2 
-                  className="text-4xl font-bold mb-8"
-                  style={{ color: '#D4AF37' }}
-                >
-                  User Management
-                </h2>
+              <div className="space-y-6 flex-1 flex flex-col">
+                <div className="border-b border-[#D4AF37]/10 pb-5">
+                  <h2 className="text-4xl font-extrabold font-display tracking-tight text-white">
+                    User Management
+                  </h2>
+                  <p className="text-gray-400 text-sm mt-1">Review user roles, emails, and directory listings.</p>
+                </div>
+
                 <div 
-                  className="rounded-xl overflow-hidden"
+                  className="rounded-2xl border overflow-hidden flex-1"
                   style={{
-                    background: 'rgba(245, 245, 245, 0.05)',
-                    border: '2px solid rgba(212, 175, 55, 0.3)',
-                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.2)'
+                    background: 'rgba(20, 20, 20, 0.4)',
+                    borderColor: 'rgba(212, 175, 55, 0.15)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
                   }}
                 >
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
+                  <div className="overflow-x-auto h-full">
+                    <table className="w-full text-left text-sm text-gray-300">
                       <thead>
-                        <tr style={{ borderBottom: '2px solid rgba(212, 175, 55, 0.3)' }}>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>ID</th>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>Name</th>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>Email</th>
-                          <th className="px-6 py-4 text-left" style={{ color: '#D4AF37' }}>Role</th>
+                        <tr className="bg-black/60 border-b border-[#D4AF37]/20">
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37]">User ID</th>
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37]">Full Name</th>
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37]">Email Address</th>
+                          <th className="px-6 py-4 font-semibold tracking-wider text-xs uppercase text-[#D4AF37]">System Access Role</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="divide-y divide-[#D4AF37]/10">
                         {users.length > 0 ? (
-                          users.map((user) => (
+                          users.map((u) => (
                             <tr 
-                              key={user.id}
-                              style={{ borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}
-                              className="hover:bg-opacity-10"
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(212, 175, 55, 0.1)'
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'transparent'
-                              }}
+                              key={u.id}
+                              className="hover:bg-[#D4AF37]/5 transition-colors duration-200"
                             >
-                              <td className="px-6 py-4" style={{ color: '#F5F5F5' }}>{user.id}</td>
-                              <td className="px-6 py-4" style={{ color: '#F5F5F5' }}>{user.name}</td>
-                              <td className="px-6 py-4" style={{ color: '#F5F5F5' }}>{user.email}</td>
+                              <td className="px-6 py-4 font-mono font-medium text-[#D4AF37]">#{u.id}</td>
+                              <td className="px-6 py-4 font-semibold text-white">{u.name}</td>
+                              <td className="px-6 py-4 text-gray-400">{u.email}</td>
                               <td className="px-6 py-4">
                                 <span 
-                                  className="px-3 py-1 rounded-full text-xs font-semibold"
+                                  className="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
                                   style={{
-                                    background: user.role === 'admin' ? 'rgba(212, 175, 55, 0.2)' : 'rgba(245, 245, 245, 0.1)',
-                                    color: user.role === 'admin' ? '#D4AF37' : '#F5F5F5',
-                                    border: `1px solid ${user.role === 'admin' ? 'rgba(212, 175, 55, 0.5)' : 'rgba(245, 245, 245, 0.3)'}`
+                                    background: u.role === 'admin' ? 'rgba(212, 175, 55, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                                    color: u.role === 'admin' ? '#D4AF37' : '#B0B0B0',
+                                    border: `1px solid ${u.role === 'admin' ? 'rgba(212, 175, 55, 0.3)' : 'rgba(255, 255, 255, 0.1)'}`
                                   }}
                                 >
-                                  {user.role || 'user'}
+                                  {u.role || 'user'}
                                 </span>
                               </td>
                             </tr>
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={4} className="px-6 py-8 text-center" style={{ color: '#F5F5F5' }}>
-                              No users found
+                            <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
+                              No registered users found.
                             </td>
                           </tr>
                         )}
@@ -681,7 +606,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>

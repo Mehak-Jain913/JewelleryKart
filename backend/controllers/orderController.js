@@ -36,6 +36,9 @@ export const checkout = async (req, res) => {
     res.status(201).json({ message: "Order created successfully", order });
   } catch (error) {
     console.error("Checkout error:", error);
+    if (error.message && (error.message.includes("stock") || error.message.includes("not found") || error.message.includes("Only"))) {
+      return res.status(400).json({ message: error.message });
+    }
     res.status(500).json({ message: "Failed to create order" });
   }
 };

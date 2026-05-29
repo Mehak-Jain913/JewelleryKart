@@ -108,7 +108,7 @@ const ProductCard = ({ product }) => {
         )}
       </div>
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-lg font-bold text-black font-display">{product.name}</h3>
+        <h3 className="text-lg font-bold text-black font-display line-clamp-1">{product.name}</h3>
         <span className="text-[#D4AF37] font-semibold">${Number(product.price).toFixed(2)}</span>
       </div>
       <div className="text-sm text-gray-600">Type: {product.type} • Qty: {product.quantity}</div>

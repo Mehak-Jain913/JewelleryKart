@@ -28,8 +28,8 @@ const Navbar = () => {
               </NavLink>
             </>
           )}
-          {/* IMPROVED: Check both role and email for admin links */}
-          {user && user.role === 'admin' && user.email === 'mehakj1208@gmail.com' && (
+          {/* IMPROVED: Check role and admin email dynamically */}
+          {user && user.role === 'admin' && (!import.meta.env.VITE_ADMIN_EMAIL || user.email === import.meta.env.VITE_ADMIN_EMAIL) && (
             <>
               <NavLink to="/admin" className={({isActive}) => `${linkBase} ${isActive ? active : inactive}`}>
                 Admin
@@ -61,5 +61,3 @@ const Navbar = () => {
 }
 
 export default Navbar
-
-

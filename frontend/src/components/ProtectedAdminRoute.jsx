@@ -6,11 +6,10 @@ const ProtectedAdminRoute = ({ children }) => {
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  // FIX: Added email verification for admin access
-  const ADMIN_EMAIL = "mehakj1208@gmail.com"
+  const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL
 
   useEffect(() => {
-    if (user && (user.role !== 'admin' || user.email !== ADMIN_EMAIL)) {
+    if (user && (user.role !== 'admin' || (ADMIN_EMAIL && user.email !== ADMIN_EMAIL))) {
       // Redirect after showing message briefly
       const timer = setTimeout(() => {
         navigate('/', { replace: true })
@@ -23,8 +22,8 @@ const ProtectedAdminRoute = ({ children }) => {
     return <Navigate to="/auth" replace />
   }
 
-  // IMPROVED: Check both role and email for admin access
-  if (user.role !== 'admin' || user.email !== ADMIN_EMAIL) {
+  // IMPROVED: Check role and admin email dynamically
+  if (user.role !== 'admin' || (ADMIN_EMAIL && user.email !== ADMIN_EMAIL)) {
     return (
       <div 
         className="min-h-screen flex items-center justify-center px-4"
@@ -67,4 +66,3 @@ const ProtectedAdminRoute = ({ children }) => {
 }
 
 export default ProtectedAdminRoute
-

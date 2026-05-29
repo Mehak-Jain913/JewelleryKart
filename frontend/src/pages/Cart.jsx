@@ -69,7 +69,8 @@ const Cart = () => {
       alert('Order placed successfully! Redirecting to orders page...')
       navigate('/orders')
     } catch (e) {
-      setError('Failed to complete checkout. Please try again.')
+      const errMsg = e.response?.data?.message || 'Failed to complete checkout. Please try again.'
+      setError(errMsg)
       console.error(e)
     } finally {
       setLoading(false)

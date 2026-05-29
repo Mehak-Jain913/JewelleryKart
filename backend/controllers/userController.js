@@ -2,7 +2,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { createUser, findUserByEmail, findUserById, updateUserRole, updateUserPassword } from "../models/userModel.js";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error("CRITICAL ERROR: JWT_SECRET environment variable is missing.");
+  process.exit(1);
+}
+
 const JWT_EXPIRES_IN = "7d";
 
 const generateToken = (userId) => {
@@ -35,16 +40,16 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
     
-    // Check for admin credentials
-    const ADMIN_EMAIL = "mehakj1208@gmail.com";
-    const ADMIN_PASSWORD = "Srasti@1208";
+    // Check for admin credentials from environment variables
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
     
     let user = await findUserByEmail(email);
     
     // FIX: If admin email matches, check password and ensure admin role
-    if (email === ADMIN_EMAIL) {
+    if (ADMIN_EMAIL && email === ADMIN_EMAIL) {
       // Check if password matches the admin password
-      if (password === ADMIN_PASSWORD) {
+      if (ADMIN_PASSWORD && password === ADMIN_PASSWORD) {
         // If user doesn't exist, create admin user
         if (!user) {
           const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 10);
@@ -61,8 +66,6 @@ export const loginUser = async (req, res) => {
             user.role = 'admin';
           }
           // IMPROVED: Verify password matches stored hash, or update if needed
-          // First check if password matches plain text admin password
-          // Then verify/update the hash in database
           const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 10);
           await updateUserPassword(user.id, passwordHash);
         }
@@ -106,7 +109,3 @@ export const me = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch profile" });
   }
 };
-
-
-
-

@@ -1,6 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import connectDB from "./config/dbConfig.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -9,18 +11,17 @@ import orderRoutes from "./routes/orders.js";
 import wishlistRoutes from "./routes/wishlist.js";
 import adminStatsRoutes from "./routes/adminStats.js";
 
-dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"],
   credentials: true
 }));
 app.use(express.json());
 
-// FIX: Initialize database connection before starting server
+// Initialize database connection before starting server
 const startServer = async () => {
   try {
     await connectDB();

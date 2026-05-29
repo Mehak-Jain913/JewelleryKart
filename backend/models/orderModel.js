@@ -19,11 +19,31 @@ export const createOrder = async (userId, total, items) => {
     );
     const orderId = orderResult.insertId;
 
-    // Insert order items
+    // Insert order items & validate/decrement stock
     for (const item of items) {
+      // Lock product row to prevent race conditions
+      const [productRows] = await connection.query(
+        `SELECT name, quantity FROM products WHERE id = ? FOR UPDATE`,
+        [item.product_id]
+      );
+      if (productRows.length === 0) {
+        throw new Error(`Product not found.`);
+      }
+      const product = productRows[0];
+      if (product.quantity < item.quantity) {
+        throw new Error(`Not enough stock for "${product.name}". Only ${product.quantity} available.`);
+      }
+
+      // Insert order item
       await connection.query(
         `INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)`,
         [orderId, item.product_id, item.quantity]
+      );
+
+      // Decrement product stock
+      await connection.query(
+        `UPDATE products SET quantity = quantity - ? WHERE id = ?`,
+        [item.quantity, item.product_id]
       );
     }
 

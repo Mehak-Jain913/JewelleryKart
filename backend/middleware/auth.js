@@ -1,7 +1,17 @@
 import jwt from "jsonwebtoken";
 import { findUserById } from "../models/userModel.js";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error("CRITICAL ERROR: JWT_SECRET environment variable is missing.");
+  process.exit(1);
+}
+
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+if (!ADMIN_EMAIL) {
+  console.error("CRITICAL ERROR: ADMIN_EMAIL environment variable is missing.");
+  process.exit(1);
+}
 
 export const authRequired = (req, res, next) => {
   const authHeader = req.headers.authorization || "";
@@ -30,8 +40,7 @@ export const adminRequired = async (req, res, next) => {
       return res.status(403).json({ message: "Access denied. Admin privileges required." });
     }
     
-    // Also verify admin email for extra security
-    const ADMIN_EMAIL = "mehakj1208@gmail.com";
+    // Verify admin email for extra security
     if (user.email !== ADMIN_EMAIL) {
       return res.status(403).json({ message: "Access denied. Admin privileges required." });
     }
@@ -43,7 +52,3 @@ export const adminRequired = async (req, res, next) => {
     return res.status(401).json({ message: "Invalid token" });
   }
 };
-
-
-
-
